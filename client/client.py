@@ -4,12 +4,15 @@ import cv2
 import numpy
 
 TCP_IP = '192.168.1.117'
-TCP_PORT = 8001
+TCP_PORT = 50007 
 
 sock = socket.socket()
 sock.connect((TCP_IP, TCP_PORT))
 
+print "Connect to " , TCP_IP
 capture = cv2.VideoCapture(0)
+
+
 while True:
 	ret, frame = capture.read()
 

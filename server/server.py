@@ -12,14 +12,22 @@ def recvall(sock, count):
         count -= len(newbuf)
     return buf
 
-TCP_IP = 'localhost'
-TCP_PORT = 8001
+TCP_IP = ''
+TCP_PORT = 50007 
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((TCP_IP, TCP_PORT))
+
 s.listen(True)
+
+print "Connecting..."
 conn, addr = s.accept()
-while True:
+
+print "Connected By ", addr
+
+
+
+while True: 
 	length = recvall(conn,16)
 	stringData = recvall(conn, int(length))
 	data = numpy.fromstring(stringData, dtype='uint8')
@@ -28,6 +36,8 @@ while True:
 	print "ok"
 	if cv2.waitKey(1) & 0xFF == ord('q'):
         	break
+
+
 s.close()
 
 
