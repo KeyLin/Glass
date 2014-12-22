@@ -20,9 +20,8 @@ s.bind((TCP_IP, TCP_PORT))
 
 s.listen(True)
 
-print "Connecting..."
+print "Waiting for Connection..."
 conn, addr = s.accept()
-
 print "Connected By ", addr
 
 
@@ -32,13 +31,16 @@ while True:
 	stringData = recvall(conn, int(length))
 	data = numpy.fromstring(stringData, dtype='uint8')
 	decimg=cv2.imdecode(data,1)
+	
+	print "EveryThing ok"
 	cv2.imshow('SERVER',decimg)
-	print "ok"
+	cv2.waitKey(30)	
 	if cv2.waitKey(1) & 0xFF == ord('q'):
         	break
 
 
 s.close()
-
-
 cv2.destroyAllWindows() 
+
+if  __name__ == "__main__":
+	pass

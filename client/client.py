@@ -23,10 +23,10 @@ while True:
 
 	sock.send( str(len(stringData)).ljust(16));
 	sock.send( stringData );
-	#decimg=cv2.imdecode(data,1)
-	#cv2.imshow('CLIENT',decimg)
-	#if cv2.waitKey(1) & 0xFF == ord('q'):
-        #	break
+	decimg=cv2.imdecode(data,1)
+	cv2.imshow('CLIENT',decimg)
+	if cv2.waitKey(1) & 0xFF == ord('q'):
+		break
 sock.close()
 
 
