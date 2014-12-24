@@ -34,7 +34,7 @@ while True:
 	
 	print "EveryThing ok"
 	cv2.imshow('SERVER',decimg)
-	cv2.waitKey(30)	
+	cv2.waitKey(10)	
 	if cv2.waitKey(1) & 0xFF == ord('q'):
         	break
 
