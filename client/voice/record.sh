@@ -1,3 +1,3 @@
 #!/bin/bash
 
-arecord -d 15 -t wav cmd
+arecord -d 15 -t wav /home/pi/glass/client/voice/cmd
