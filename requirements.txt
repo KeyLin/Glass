@@ -1,3 +1,4 @@
+bluez-python==0.1.4
 Cython==0.21.1
 ipython==2.3.1
 matplotlib==1.4.2
