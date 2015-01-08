@@ -61,5 +61,7 @@ r = requests.post(serverUrl,headers = headers, data = json.dumps(data_json))
 
 text = r.json()['result'][0].encode('utf-8')
 
+print text
+
 if '短信' in text:
 	print "ok" 
