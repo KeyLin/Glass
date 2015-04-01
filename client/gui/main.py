@@ -45,8 +45,54 @@ class LiveFrame(wx.Frame):
         evt.Skip()
 
 
+class ShowCapture(wx.Panel):
+    def __init__(self,parent,capture,fps=30):
+        wx.Panel.__init__(self,parent)
+
+        self.capture = capture
+
+        ret,frame = self.capture.read()
+        height,width = frame.shape[:2]
+        parent.SetSize((width,height))
+
+        frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
+
+        self.bmp = wx.BitmapFromBuffer(width,height,frame)
+        self.timer = wx.Timer(self)
+        self.timer.Start(1000.0/fps)
+
+        self.Bind(wx.EVT_PAINT,self.OnPaint)
+        self.Bind(wx.EVT_TIMER,self.NextFrame)
+
+    def OnPaint(self,evt):
+        dc = wx.BufferedPaintDC(self)
+        dc.DrawBitmap(self.bmp,0,0)
+
+
+    def NextFrame(self,event):
+        ret, frame = self.capture.read()
+
+        if ret:
+            frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
+            self.bmp.CopyFromBuffer(frame)
+            self.Refresh()
+
+
+
+
 if __name__ == "__main__":
+    # app = wx.App()
+    # app.RestoreStdio()
+    # LiveFrame(None)
+    # app.MainLoop()
+
+    capture = cv2.VideoCapture()
+    # capture.set(cv2.CV_CAP_PROP_FRAME_WIDTH,320)
+    # capture.set(cv2.CV_CAP_PROP_FRAME_HEIGHT,240)
     app = wx.App()
-    app.RestoreStdio()
-    LiveFrame(None)
+    frame = wx.Frame(None)
+    cap = ShowCapture(frame,capture)
+    frame.Show()
+
     app.MainLoop()
+
