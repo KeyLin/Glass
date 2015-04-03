@@ -1,67 +1,87 @@
 #coding=utf-8
 import urllib,urllib2
-
 import requests
 import json
 from requests import Request,Session
-
-from file_to_base64 import file_to_base64
+import ConfigParser
+import base64
 import os
 
+class sendBaidu(object):
+	"""docstring for sendBaidu"""
+	def __init__(self, fileFormat, audioFile):
+		super(sendBaidu, self).__init__()
+		config = ConfigParser.ConfigParser()
+		config.read('config.ini')
 
-apiKey ="OhqSXEmuAopiyr7LMWXcDs73"
-secretKey = "IMfvWF4ygtxIzmt5lT5qp0EimSIkqbb2"
+		self.cuid = config.get('baidu','cuid')
+		self.apiKey = config.get('baidu','apiKey')
+		self.secretKey = config.get('baidu','secretKey')
+		self.tokenUrl = config.get('baidu','tokenUrl')
+		self.serverUrl = config.get('baidu','serverUrl')
+		self.fileFormat = fileFormat
+		self.audioFile = audioFile 
+		
+
+	def getToken(self):
+		getTokenURL = self.tokenUrl + "&client_id=" + self.apiKey + "&client_secret=" + self.secretKey
+		#print getTokenURL
+		f = urllib.urlopen(getTokenURL)
+		try:
+			access_token =  eval(f.read())['access_token']
+		except:
+			print " Try to refresh your auth code"
+			exit(0)
+		return access_token	
 
 
-getTokenURL = "https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials" + "&client_id=" + apiKey + "&client_secret=" + secretKey
+	def decodeFile(self):
+		with open(self.audioFile,"r") as f:
+			data = f.read()
+			data_base64 = base64.b64encode(data) 
+		if data_base64:
+			return data_base64
+		else:
+			print "Failed encode the file to base64"
+			return None 
+
+    
+	def sendAudio(self):
+		content_length = 0
+		file_len = os.path.getsize(self.audioFile)
+		body = self.decodeFile()
+		access_token = self.getToken()
+		data_json = {
+			"format": self.fileFormat,
+			"rate"  : 16000,
+			"channel": 1,
+			"len" : file_len,
+			"speech": body,
+			"cuid":self.cuid,
+			"token":access_token,
+		}
+
+		headers = {
+			"content-type":"application/json",
+			"charset" : "utf-8",
+		}
+
+		r = requests.post(self.serverUrl, headers = headers, data = json.dumps(data_json))
+
+		return r
 
 
-f = urllib.urlopen(getTokenURL)
+	def getResult(self):
+		result = self.sendAudio()
+		result = result.json()
+		if result.get('err_no') == 0:
+			text = "".join(result.get('result')).encode('utf-8')
+			print text
+		else:
+			err_msg = "".join(result.get('err_msg')).encode('utf-8')
+			print err_msg
+			exit(0)
 
-
-try:
-	access_token =  eval(f.read())['access_token']
-except:
-	print " Try to refresh your auth code"
-	exit(0)	
-
-
-serverUrl = "http://vop.baidu.com/server_api" 
-
-cuid = "voiceTest"
-
-body = ""
-content_length = 0
-file_len = os.path.getsize('cmd.wav')
-print file_len
-try:	
-	body = file_to_base64("cmd.wav")
-	if body == None:
-		raise Exception
-except:
-	print "Change file_to_base64 failed"	
-	exit(0)
-
-headers = {
-	"content-type":"application/json",
-	"charset" : "utf-8",
-}
-
-data_json = {
-	"format": "wav",
-	"rate"  : 16000,
-	"channel": 1,
-	"len" : file_len,
-	"speech": body,
-	"cuid":cuid,
-	"token":access_token,
-}
-
-r = requests.post(serverUrl,headers = headers, data = json.dumps(data_json))
-
-text = r.json()['result'][0].encode('utf-8')
-
-print text
-
-if '短信' in text:
-	print "ok" 
+if __name__ == "__main__":
+	test = sendBaidu(fileFormat = "pcm", audioFile = "data/cmd.pcm")
+	test.getResult()
