@@ -52,13 +52,13 @@ class sendBaidu(object):
 		body = self.decodeFile()
 		access_token = self.getToken()
 		data_json = {
-			"format": self.fileFormat,
-			"rate"  : 16000,
+			"format" : self.fileFormat,
+			"rate"   : 16000,
 			"channel": 1,
-			"len" : file_len,
-			"speech": body,
-			"cuid":self.cuid,
-			"token":access_token,
+			"cuid"   : self.cuid,
+			"token"  : access_token,
+			"len"    : file_len,
+			"speech" : body,
 		}
 
 		headers = {
@@ -80,7 +80,7 @@ class sendBaidu(object):
 		else:
 			err_msg = "".join(result.get('err_msg')).encode('utf-8')
 			print err_msg
-			exit(0)
+			#exit(0)
 
 if __name__ == "__main__":
 	test = sendBaidu(fileFormat = "pcm", audioFile = "data/cmd.pcm")
