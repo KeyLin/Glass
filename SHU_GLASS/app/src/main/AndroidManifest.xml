@@ -3,7 +3,8 @@
     package="edu.shu.shu_glass" >
 
     <uses-permission android:name="android.permission.bluetooth" />
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,17 +24,17 @@
             android:name=".BlueToothService"
             android:enabled="true"
             android:exported="true" >
-
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </service>
-
-
-
+        <service
+            android:name=".ReadMessages"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
-
-
 
 </manifest>

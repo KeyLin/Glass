@@ -1,6 +1,6 @@
 package edu.shu.shu_glass;
 
-import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -30,23 +30,11 @@ public class MainActivity extends ActionBarActivity {
     private OnClickListener listener = new OnClickListener(){
         @Override
         public void onClick(View v){
-//            Intent intent = new Intent(MainActivity.this,BlueToothService.class);
-//            switch (v.getId()){
-//                case R.id.openBlueToothBtn:
-//                    startService(intent);
-//            }
+            Intent intent = new Intent(MainActivity.this,BlueToothService.class);
+            startService(intent);
 
-            BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-            int state = adapter.getState();
-            if (state == BluetoothAdapter.STATE_OFF) {
-                adapter.enable();
-
-            }else if (state == BluetoothAdapter.STATE_ON) {
-//                do nothing
-            }
 
         }
-
     };
 
 
@@ -69,5 +57,7 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+
+
     }
 }

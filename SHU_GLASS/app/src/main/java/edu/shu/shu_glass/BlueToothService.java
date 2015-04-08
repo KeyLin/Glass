@@ -65,9 +65,15 @@ public class BlueToothService extends Service {
 
         Log.i(TAG, "MessengerService.onCreate()...pid: " + Process.myPid());
 
+        if(mBluetoothAdapter.STATE_OFF == 1){
+              mBluetoothAdapter.enable();
+        }
+
+
         mServerThread = new ServerThread();
         mServerThread.start();
         MainActivity.isBlueTeethOpened = true;
+
     }
 
     private Handler mHandler = new Handler(){
@@ -81,7 +87,6 @@ public class BlueToothService extends Service {
                     break;
                 default:
                     break;
-
             }
         }
     };
@@ -119,7 +124,6 @@ public class BlueToothService extends Service {
 
                  /* 接受客户端的连接请求 */
                 socket = mServerSocket.accept();
-
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -202,4 +206,6 @@ public class BlueToothService extends Service {
                 }
             }.start();
         }
+
+
 }
