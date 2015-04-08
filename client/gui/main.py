@@ -1,98 +1,66 @@
 import wx
 import cv2
-class LiveFrame(wx.Frame):
-    fps = 30
-    def __init__(self, parent):
-        wx.Frame.__init__(self, parent, -1, title="Live Camera Feed")
+from PIL import Image, ImageTk
+import Tkinter as tk
 
-        self.SetDoubleBuffered(True)
-        self.capture = None
-        self.bmp = None
-        self.mm = wx.DisplaySize()
-
-        #set up camaera init
-        self.capture = cv2.CaptureFromCAM(0)
-        frame = cv2.QueryFrame(self.capture)
-        if frame:
-            cv2.CvtColor(frame, frame, cv2.CV_BGR2RGB)
-            self.bmp = wx.BitmapFromBuffer(frame.width, frame.height, frame.tostring())
-            # self.bmp = self.bmp.ConvertToImage().Resize((self.mm[0], self.mm[1]), (0, 0)).ConvertToBitmap()
-        self.displayPanel = wx.Panel(self, -1)
-
-        self.fpstimer = wx.Timer(self)
-        self.fpstimer.Start(1000 / self.fps)
-        self.Bind(wx.EVT_TIMER, self.onNextFrame, self.fpstimer)
-        self.Bind(wx.EVT_PAINT, self.onPaint)
-
-        self.ShowFullScreen(True, style=wx.FULLSCREEN_ALL)
-
-    def updateVideo(self):
-        frame = cv2.QueryFrame(self.capture)
-        if frame:
-            cv2.CvtColor(frame, frame, cv2.CV_BGR2RGB)
-            self.bmp.CopyFromBuffer(frame.tostring())
-            # self.bmp = self.bmp.ConvertToImage().Resize((self.mm[0], self.mm[1]), (0, 0)).ConvertToBitmap()
-            self.Refresh()
-
-    def onNextFrame(self, evt):
-        self.updateVideo()
-        #self.Refresh()
-        evt.Skip()
-
-    def onPaint(self, evt):
-        if self.bmp:
-            wx.BufferedPaintDC(self.displayPanel, self.bmp)
-        evt.Skip()
+scnWidth = 0
+scnHeight = 0
 
 
-class ShowCapture(wx.Panel):
-    def __init__(self,parent,capture,fps=30):
-        wx.Panel.__init__(self,parent)
-
-        self.capture = capture
-
-        ret,frame = self.capture.read()
-        height,width = frame.shape[:2]
-        parent.SetSize((width,height))
-
-        frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
-
-        self.bmp = wx.BitmapFromBuffer(width,height,frame)
-        self.timer = wx.Timer(self)
-        self.timer.Start(1000.0/fps)
-
-        self.Bind(wx.EVT_PAINT,self.OnPaint)
-        self.Bind(wx.EVT_TIMER,self.NextFrame)
-
-    def OnPaint(self,evt):
-        dc = wx.BufferedPaintDC(self)
-        dc.DrawBitmap(self.bmp,0,0)
+def quit_(root, process):
+    process.terminate()
+    root.destroy()
 
 
-    def NextFrame(self,event):
-        ret, frame = self.capture.read()
+def update_image(image_label, queue):
+    global scnWidth, scnHeight
+    frame = queue.get()
+    im = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    a = Image.fromarray(im)
+    a = a.resize((scnWidth, scnHeight), Image.ANTIALIAS)
+    b = ImageTk.PhotoImage(image=a)
+    image_label.configure(image=b)
+    image_label._image_cache = b  # avoid garbage collection
+    root.update()
 
-        if ret:
-            frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
-            self.bmp.CopyFromBuffer(frame)
-            self.Refresh()
+
+def update_all(root, image_label, queue):
+    update_image(image_label, queue)
+    root.after(0, func=lambda: update_all(root, image_label, queue))
+
+
+def image_capture(queue):
+    vidFile = cv2.VideoCapture(0)
+    while True:
+        try:
+            flag, frame = vidFile.read()
+            if flag == 0:
+                break
+            queue.put(frame)
+            cv2.waitKey(20)
+        except:
+            continue
 
 
 
-
-if __name__ == "__main__":
-    # app = wx.App()
-    # app.RestoreStdio()
-    # LiveFrame(None)
-    # app.MainLoop()
-
-    capture = cv2.VideoCapture()
-    # capture.set(cv2.CV_CAP_PROP_FRAME_WIDTH,320)
-    # capture.set(cv2.CV_CAP_PROP_FRAME_HEIGHT,240)
-    app = wx.App()
-    frame = wx.Frame(None)
-    cap = ShowCapture(frame,capture)
-    frame.Show()
-
-    app.MainLoop()
-
+if __name__ == '__main__':
+    queue = Queue()
+    print 'queue initialized...'
+    root = tk.Tk()
+    scnWidth, scnHeight = root.maxsize()
+    print 'GUI initialized...'
+    image_label = tk.Label(master=root)  # label for the video frame
+    image_label.pack()
+    print 'GUI image label initialized...'
+    p = Process(target=image_capture, args=(queue,))
+    p.start()
+    print 'image capture process has started...'
+    quit_button = tk.Button(master=root, text='Quit', command=lambda: quit_(root, p))
+    quit_button.pack()
+    print 'quit button initialized...'
+    root.after(0, func=lambda: update_all(root, image_label, queue))
+    print 'root.after was called...'
+    root.mainloop()
+    print 'mainloop exit'
+    p.join()
+    print 'image capture process exit'

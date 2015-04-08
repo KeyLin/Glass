@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SHU_GLASS</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="bluetooth_service_connected">BlueTooth service connected!</string>
+</resources>

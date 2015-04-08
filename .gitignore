@@ -4,3 +4,5 @@ venv/
 *.pcm
 *.spx
 *.exe
+.idea/
+.DS_store
