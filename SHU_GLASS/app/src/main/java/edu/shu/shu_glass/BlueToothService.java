@@ -124,11 +124,9 @@ public class BlueToothService extends Service {
 
                  /* 接受客户端的连接请求 */
                 socket = mServerSocket.accept();
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
