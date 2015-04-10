@@ -33,8 +33,6 @@ public class BlueToothService extends Service {
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private BluetoothSocket socket = null;
 
-
-
     private Messenger cMessager = null;
 
 
@@ -46,6 +44,7 @@ public class BlueToothService extends Service {
     }
 
     public BlueToothService() {
+
     }
 
     @Override
@@ -56,7 +55,6 @@ public class BlueToothService extends Service {
         return mMessager.getBinder();
 
     }
-
 
 
     @Override

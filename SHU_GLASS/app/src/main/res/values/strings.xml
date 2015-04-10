@@ -6,5 +6,6 @@
 
     <string name="bluetooth_service_connected">BlueTooth service connected!</string>
     <string name="title_activity_read_sms">ReadSMS</string>
+    <string name="title_activity_blue_tooth">BlueToothActivity</string>
 
 </resources>

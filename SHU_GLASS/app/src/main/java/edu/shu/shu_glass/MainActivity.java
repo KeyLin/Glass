@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,9 +50,6 @@ public class MainActivity extends ActionBarActivity {
             String msg = getSmsFromPhone();
         }
     };
-
-
-
     private Uri SMS_INBOX = Uri.parse("content://sms/");
     final String SMS_URI_ALL   = "content://sms/";
     final String SMS_URI_SEND  = "content://sms/sent";
@@ -66,16 +62,13 @@ public class MainActivity extends ActionBarActivity {
 
         String[] projection = new String[]{"_id", "address", "person",
                 "body", "date", "type"};
-        String where = " address = '1066321332' AND date >  "
-                + (System.currentTimeMillis() - 10 * 60 * 1000);
-        Cursor cur = cr.query(SMS_INBOX, projection, null, null, "date desc");
+        String where = " address = '18717907831' ";
+        Cursor cur = cr.query(SMS_INBOX, projection, where, null, "date desc");
         if (null == cur)
             return null;
 
         if (cur.moveToFirst()) {
             String number = cur.getString(cur.getColumnIndex("address"));//手机号
-
-            Log.i("CURMOVEFIRST",number);
 
             String name = cur.getString(cur.getColumnIndex("person"));//联系人姓名列表
             String body = cur.getString(cur.getColumnIndex("body"));
