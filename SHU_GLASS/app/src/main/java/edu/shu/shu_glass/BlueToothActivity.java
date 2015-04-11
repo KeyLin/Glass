@@ -1,14 +1,14 @@
 package edu.shu.shu_glass;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class BlueToothActivity extends ActionBarActivity {
@@ -20,17 +20,38 @@ public class BlueToothActivity extends ActionBarActivity {
 
         ListView blueToothDevice = new ListView(this);
 
-        blueToothDevice.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,getDevice()));
+//        blueToothDevice.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,getDevice()));
+        search();
 
+        Button communiteBtn = (Button)findViewById(R.id.communiteBtn);
+
+        communiteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BlueToothActivity.this,BlueToothCommuniteActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
-    private List<String> getDevice(){
-        List<String> device = new ArrayList<String>();
+    private void search(){
 
-        return device;
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (!adapter.enable()) {
+            adapter.enable();
+        }
+        Intent enable = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
 
+        enable.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 3600);
+        startActivity(enable);
+
+//        Intent searchIntent = new Intent(this, ComminuteActivity.class);
+//         startActivity(searchIntent);
     }
+
+
+
 
 
     @Override

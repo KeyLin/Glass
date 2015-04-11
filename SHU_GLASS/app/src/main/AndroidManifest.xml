@@ -3,6 +3,7 @@
     package="edu.shu.shu_glass" >
 
     <uses-permission android:name="android.permission.bluetooth" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -35,19 +36,12 @@
         </service>
 
         <activity
-            android:name=".ReadSMSActivity"
-            android:label="@string/title_activity_read_sms" >
-        </activity>
-
-        <receiver android:name=".MessageInTime" >
-            <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-            </intent-filter>
-        </receiver>
-
-        <activity
             android:name=".BlueToothActivity"
             android:label="@string/title_activity_blue_tooth" >
+        </activity>
+        <activity
+            android:name=".BlueToothCommuniteActivity"
+            android:label="@string/title_activity_blue_tooth_communite" >
         </activity>
     </application>
 

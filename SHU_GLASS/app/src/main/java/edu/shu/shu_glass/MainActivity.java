@@ -1,5 +1,6 @@
 package edu.shu.shu_glass;
 
+
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
@@ -34,26 +35,11 @@ public class MainActivity extends ActionBarActivity {
         readSMSBtn.setOnClickListener(readSMSListener);
     }
 
-
-    private OnClickListener readSMSListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            //Intent readSMSIntent = new Intent(MainActivity.this, ReadSMSActivity.class);
-            //startActivity(readSMSIntent);
-
-//            Intent readSMSIntent = new Intent("android.provider.Telephony.SMS_RECEIVED");
-//            Bundle bundle = new Bundle();
-//            bundle.putInt("pdus",10);
-//            readSMSIntent.putExtras(bundle);
-//            sendBroadcast(readSMSIntent);
-
-            String msg = getSmsFromPhone();
-        }
-    };
+    //---------* Get SMS from phone *---------------------------
     private Uri SMS_INBOX = Uri.parse("content://sms/");
-    final String SMS_URI_ALL   = "content://sms/";
-    final String SMS_URI_SEND  = "content://sms/sent";
-    final String SMS_URI_DRAFT = "content://sms/draft";
+    //    final String SMS_URI_ALL   = "content://sms/";
+//    final String SMS_URI_SEND  = "content://sms/sent";
+//    final String SMS_URI_DRAFT = "content://sms/draft";
     public String getSmsFromPhone() {
 
         StringBuilder smsBuilder = new StringBuilder();
@@ -79,16 +65,21 @@ public class MainActivity extends ActionBarActivity {
         return smsBuilder.toString();
     }
 
+    //------------* end *----------------------------
 
+    private OnClickListener readSMSListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String msg = getSmsFromPhone();
+        }
+    };
 
 
     private OnClickListener listener = new OnClickListener(){
         @Override
         public void onClick(View v){
-            Intent intent = new Intent(MainActivity.this,BlueToothService.class);
-
-            startService(intent);
-
+            Intent intent = new Intent(MainActivity.this,BlueToothActivity.class);
+            startActivity(intent);
         }
     };
 
@@ -99,6 +90,9 @@ public class MainActivity extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
