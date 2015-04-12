@@ -22,6 +22,7 @@ package[1]=swig
 # python-pocketsphinx-dbg 
 
 # package[7]=pocketsphinx-lm-zh-hans-gigatdt 
+module[0]=pocketsphinx
 
 function PackageInstall()
 {
@@ -51,6 +52,12 @@ for ((i=0;i<${#package[@]};i++));
 	do
 		#echo ${package[i]}
 		PackageInstall ${package[i]}
+	done 
+
+for ((i=0;i<${#module[@]};i++));
+	do
+		#echo ${package[i]}
+		ModuleInstall ${module[i]}
 	done 
 
 pkg-config --list-all | grep sphinxbase > /dev/null
