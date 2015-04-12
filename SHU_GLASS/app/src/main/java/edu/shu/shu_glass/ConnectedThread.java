@@ -45,13 +45,18 @@ public class ConnectedThread extends Thread{
                 // Send the obtained bytes to the UI activity
 //                mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
 //                        .sendToTarget();
-                
+                String t = new String(buffer);
+                //clean up this array
+                buffer = new byte[1024];
 
+                //write();
+                Log.i(TAG,t);
             } catch (IOException e) {
                 break;
             }
         }
     }
+
 
     /* Call this from the main activity to send data to the remote device */
     public void write(byte[] bytes) {

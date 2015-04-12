@@ -67,9 +67,7 @@ public class BlueToothCommuniteActivity extends ActionBarActivity {
                 // test uuid :
                 connect = new ConnectThread(device,bluetoothAdapter,handler);
                 connect.start();
-
                 //ConnectedThread rasp = new ConnectedThread(connect.getSocket());
-
                 //rasp.start();
 
             }
