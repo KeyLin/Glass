@@ -29,7 +29,7 @@ function PackageInstall()
 	if [ $? -eq 0 ]; then
 		echo "$1 already exit"
 	else
-		sudo apt-get install -y '$1' || { echo "$1 install failed"; exit 1; } 
+		sudo apt-get install -y $1 || { echo "$1 install failed"; exit 1; } 
 		echo "$1 successfully installed"
 	fi
 	return 0;
