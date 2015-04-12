@@ -1,20 +1,27 @@
 #bin/bash
 
+myDir="~/work-dir/"
+if [ ! -d "$myDir" ]; then
+	mkdir "$myDir"
+fi
+
+cd "$myDir"
+
 declare -a package
 declare -a module
 
-package[0]=libsphinxbase-dev
-package[1]=libsphinxbase1
-package[2]=sphinxbase-utils
+package[0]=bison
+package[1]=swig
+# package[2]=sphinxbase-utils
 
-package[3]=libpocketsphinx-dev
-package[4]=libpocketsphinx1
+# package[3]=libpocketsphinx-dev
+# package[4]=libpocketsphinx1
 
-package[5]=python-sphinxbase
-package[6]=python-pocketsphinx
-#python-pocketsphinx-dbg 
+# package[5]=python-sphinxbase
+# package[6]=python-pocketsphinx
+# python-pocketsphinx-dbg 
 
-package[7]=pocketsphinx-lm-zh-hans-gigatdt 
+# package[7]=pocketsphinx-lm-zh-hans-gigatdt 
 
 function PackageInstall()
 {
@@ -46,4 +53,39 @@ for ((i=0;i<${#package[@]};i++));
 		PackageInstall ${package[i]}
 	done 
 
+pkg-config --list-all | grep sphinxbase > /dev/null
+if [ $? -eq 1 ]; then
+    myFile0="./sphinxbase-5prealpha.tar.gz"
+    myDir0="./sphinxbase-5prealpha"
+    if [ ! -f "$myFile0" ]; then
+    	wget http://jaist.dl.sourceforge.net/project/cmusphinx/sphinxbase/5prealpha/sphinxbase-5prealpha.tar.gz
+    fi
+    if [ ! -d "$myDir0" ]; then
+    	tar -xzvf sphinxbase-5prealpha.tar.gz
+    fi
+    ./sphinxbase-5prealpha/configure --enable-fixed&&make&&sudo make install || { echo "sphinxbase install failed"; exit 1; }
+    echo "sphinxbase successfully installed"
+else echo "sphinxbase already exit "
+fi
 
+pkg-config --list-all | grep pocketsphinx > /dev/null
+if [ $? -eq 1 ]; then
+    myFile0="./pocketsphinx-5prealpha.tar.gz"
+    myDir0="./pocketsphinx-5prealpha"
+    if [ ! -f "$myFile0" ]; then
+    	wget http://jaist.dl.sourceforge.net/project/cmusphinx/pocketsphinx/5prealpha/pocketsphinx-5prealpha.tar.gz
+    fi
+    if [ ! -d "$myDir0" ]; then
+    	tar -xzvf pocketsphinx-5prealpha.tar.gz
+    fi
+    ./pocketsphinx-5prealpha/configure&&make&&sudo make install || { echo "pocketsphinx install failed"; exit 1; }
+    echo export LD_LIBRARY_PATH=/usr/local/lib | sudo tee -a /etc/profile 
+    echo export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig | sudo tee -a /etc/profile
+    source /etc/profile  
+    echo "pocketsphinx successfully installed"
+else echo "pocketsphinx already exit "
+fi
+
+pocketsphinx_continuous -samprate 16000/8000/48000 
+#rm -rf ../work-dir
+echo -e "\nSuccessfully deployed!\n"
