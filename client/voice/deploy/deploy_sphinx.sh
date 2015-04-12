@@ -1,8 +1,8 @@
 #bin/bash
 
-myDir="~/work-dir/"
+myDir="/tmp/work-dir"
 if [ ! -d "$myDir" ]; then
-	mkdir "$myDir"
+	sudo mkdir "$myDir"
 fi
 
 cd "$myDir"
