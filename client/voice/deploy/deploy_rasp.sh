@@ -7,61 +7,56 @@ fi
 
 cd "$myDir"
 
-dpkg -l | grep libogg-dev  > /dev/null
-if [ $? -eq 0 ]; then
-	echo "libogg-dev already exit"
-else
-	sudo apt-get install -y libogg-dev || { echo "libogg-dev install failed"; exit 1; } 
-	echo "libogg-dev successfully installed"
-fi
+declare -a package
+declare -a module
 
-dpkg -l | grep python2.7-dev  > /dev/null
-if [ $? -eq 0 ]; then
-	echo "python2.7-dev already exit"
-else
-	sudo apt-get install -y python2.7-dev || { echo "python2.7-dev install failed"; exit 1; }
-	echo "python2.7-dev successfully installed"
-fi
+package[0]=libogg-dev
+package[1]=python2.7-dev
+package[2]=python-pip
 
-whatis pip  > /dev/null
-if [ $? -eq 0 ]; then
-	echo "python-pip already exit"
-else
-	sudo apt-get install -y python-pip || { echo "python-pip install failed"; exit 1; }
-	echo "python-pip successfully installed"
-fi
+package[3]=speex
+package[4]=libspeex-dev
+package[5]=pkg-config
 
-dpkg -l | grep speex  > /dev/null
-if [ $? -eq 0 ]; then
-	echo "speex already exit"
-else
-	sudo apt-get install -y speex  || { echo "speex install failed"; exit 1; }
-	echo "speex successfully installed"
-fi
+module[0]=PyAudio
+module[1]=Pyrex
 
-dpkg -l | grep libspeex-dev > /dev/null
-if [ $? -eq 0 ]; then
-	echo "libspeex already exit"
-else
-	sudo apt-get install libspeex-dev  || { echo "libspeex-dev install failed"; exit 1; }
-	echo "libspeex successfully installed"
-fi
 
-pip freeze | grep Pyrex  > /dev/null
-if [ $? -eq 0 ]; then
-	echo "pyrex already exit"
-else
-	sudo pip install pyrex  --allow-external pyrex --allow-unverified pyrex || { echo "pyrex install failed"; exit 1; }
-	echo "pyrex successfully installed"
-fi
+function PackageInstall()
+{
+	#echo $1
+	dpkg -l | grep $1  > /dev/null
+	if [ $? -eq 0 ]; then
+		echo "$1 already exit"
+	else
+		sudo apt-get install -y '$1' || { echo "$1 install failed"; exit 1; } 
+		echo "$1 successfully installed"
+	fi
+	return 0;
+}
 
-dpkg -l | grep pkg-config  > /dev/null
-if [ $? -eq 0 ]; then
-	echo "pkg-config already exit"
-else
-	sudo apt-get install -y pkg-config  || { echo "pkg-config install failed"; exit 1; }
-	echo "pkg-config successfully installed"
-fi
+function ModuleInstall()
+{
+	pip freeze | grep $1  > /dev/null
+	if [ $? -eq 0 ]; then
+		echo "$1 already exit"
+	else
+		sudo pip install $1  --allow-external $1 --allow-unverified $1 || { echo "$1 install failed"; exit 1; }
+		echo "$1 successfully installed"
+	fi
+}
+
+for ((i=0;i<${#package[@]};i++));
+	do
+		#echo ${package[i]}
+		PackageInstall ${package[i]}
+	done 
+
+for ((i=0;i<${#module[@]};i++));
+	do
+		#echo ${package[i]}
+		ModuleInstall ${module[i]}
+	done
 
 pkg-config --list-all | grep portaudio > /dev/null
 if [ $? -eq 1 ]; then
@@ -75,13 +70,6 @@ if [ $? -eq 1 ]; then
 else echo "portaudio already exit "
 fi
 
-pip freeze | grep PyAudio  > /dev/null
-if [ $? -eq 0 ]; then
-	echo "pyaudio already exit"
-else
-	sudo pip install pyaudio --allow-external pyaudio --allow-unverified pyaudio || { echo "pyaudio install failed"; exit 1; }
-	echo "pyaudio successfully installed"
-fi
 
 
 #myFile1="./speex-1.2rc1.tar.gz"
