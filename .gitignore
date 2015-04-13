@@ -4,5 +4,6 @@ venv/
 *.pcm
 *.spx
 *.exe
+*.opus
 .idea/
 .DS_store
