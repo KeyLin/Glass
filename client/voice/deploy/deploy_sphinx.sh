@@ -54,12 +54,6 @@ for ((i=0;i<${#package[@]};i++));
 		PackageInstall ${package[i]}
 	done 
 
-for ((i=0;i<${#module[@]};i++));
-	do
-		#echo ${package[i]}
-		ModuleInstall ${module[i]}
-	done 
-
 pkg-config --list-all | grep sphinxbase > /dev/null
 if [ $? -eq 1 ]; then
     myFile0="./sphinxbase-5prealpha.tar.gz"
@@ -92,6 +86,12 @@ if [ $? -eq 1 ]; then
     echo "pocketsphinx successfully installed"
 else echo "pocketsphinx already exit "
 fi
+
+for ((i=0;i<${#module[@]};i++));
+	do
+		#echo ${package[i]}
+		ModuleInstall ${module[i]}
+	done 
 
 pocketsphinx_continuous -samprate 16000/8000/48000 
 #rm -rf ../voiceRecognition

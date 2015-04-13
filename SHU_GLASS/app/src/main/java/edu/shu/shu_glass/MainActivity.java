@@ -40,6 +40,7 @@ public class MainActivity extends ActionBarActivity {
     //    final String SMS_URI_ALL   = "content://sms/";
 //    final String SMS_URI_SEND  = "content://sms/sent";
 //    final String SMS_URI_DRAFT = "content://sms/draft";
+
     public String getSmsFromPhone() {
 
         StringBuilder smsBuilder = new StringBuilder();
@@ -106,7 +107,8 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-
-
     }
+
+
+
 }
