@@ -67,6 +67,7 @@ public class ConnectThread extends Thread{
 
     }
 
+
     /** Will cancel an in-progress connection, and close the socket */
     public void cancel() {
         try {

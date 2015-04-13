@@ -4,9 +4,12 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -74,12 +77,55 @@ public class BlueToothCommuniteActivity extends ActionBarActivity {
         });
     }
 
+    private Uri SMS_INBOX = Uri.parse("content://sms/");
+    //    final String SMS_URI_ALL   = "content://sms/";
+//    final String SMS_URI_SEND  = "content://sms/sent";
+//    final String SMS_URI_DRAFT = "content://sms/draft";
+    public String getSmsFromPhone() {
+
+        StringBuilder smsBuilder = new StringBuilder();
+
+        ContentResolver cr = getContentResolver();
+
+        String[] projection = new String[]{"_id", "address", "person",
+                "body", "date", "type"};
+        String where = " address = '18717907831' ";
+        Cursor cur = cr.query(SMS_INBOX, projection, where, null, "date desc");
+        if (null == cur)
+            return null;
+
+        if (cur.moveToFirst()) {
+            String number = cur.getString(cur.getColumnIndex("address"));//手机号
+
+            String name = cur.getString(cur.getColumnIndex("person"));//联系人姓名列表
+            String body = cur.getString(cur.getColumnIndex("body"));
+
+            smsBuilder.append(number + name + body);
+
+        }
+        return smsBuilder.toString();
+    }
+
+
+    private static final int GET_MESSAGE=1;
+    private final Handler smsHandler = new Handler(){
+        public void handleMessage(Message msg){
+            if (msg.what == GET_MESSAGE){
+                String sms = getSmsFromPhone();
+                ConnectedThread send_msg = new ConnectedThread(connect.getSocket(),smsHandler);
+                send_msg.write(sms.getBytes());
+
+
+            }
+        }
+    };
+
 
     private static final int CONNECT_COMPLETE = 1;
     private final Handler handler = new Handler(){
         public void handleMessage(Message msg){
             if( msg.what == CONNECT_COMPLETE){
-                ConnectedThread rasp = new ConnectedThread(connect.getSocket());
+                ConnectedThread rasp = new ConnectedThread(connect.getSocket(),smsHandler);
                 rasp.start();
             }
         }

@@ -4,6 +4,7 @@ import bluetooth
 import threading,thread
 import logging
 import time
+import json
 
 
 lock = threading.Lock()
@@ -33,7 +34,8 @@ class Server:
         self.client_socket, self.address = self.server_socket.accept()
         print "Accepted connection from ", self.address
         try:
-            self.client_socket.send("Connect Setup")
+            pass
+            #self.client_socket.send("Connect Setup")
         except AttributeError as e:
             print e
 
@@ -43,19 +45,29 @@ class Server:
             return
 
         while True:
-            if con.acquire():
-                print "server thread get con , and started "
-                if lock.acquire():
-                    con.notify()
-                    lock.release()
-                    print "server thread release thread and wait"
-                    con.wait()
+            print "server thread release thread and wait"
+            # 这里会阻塞
+            # for test
+            data = raw_input("Please enter cmd")
 
-                    # 这里会阻塞
-                    data = self.client_socket.recv(1024)
+            send_buf = data
+            #send_buf = json.dumps(data)
 
-                    if data.length != 0:
-                        print "received [%s] " % data
+            self.client_socket.send(send_buf)
+
+            print "waiting for first ok"
+            recv_buf = self.client_socket.recv(1024)
+            print "received [%s]" %recv_buf
+
+            if recv_buf is not None:
+                self.client_socket.send("ok")
+
+            print "waiting for second ok"
+            recv_buf = self.client_socket.recv(1024)
+            if recv_buf == "ok":
+                #do some action
+                print "complete a circle"
+
 
     def send_msg(self):
 
@@ -93,15 +105,16 @@ if __name__ == "__main__":
     ser.setup_socket()
     if ser.client_socket is not None:
 
-        server = threading.Thread(target=ser.start_server)
-        server.start()
-        client = threading.Thread(target=ser.send_msg)
-        client.start()
+        ser.start_server()
+        #server = threading.Thread(target=ser.start_server)
+        #server.start()
+        #client = threading.Thread(target=ser.send_msg)
+        #client.start()
         #time.sleep(100)
 
-        while True:
-            s = raw_input()
-            send_msg(s)
+        #while True:
+        #    s = raw_input()
+        #    send_msg(s)
 
 
 
