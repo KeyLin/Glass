@@ -4,7 +4,7 @@
 from sendBaidu import sendBaidu
 
 print "wav:",
-test0 = sendBaidu(fileFormat = "amr", audioFile = "data/cmd.wav")
+test0 = sendBaidu(fileFormat = "wav", audioFile = "data/cmd.wav")
 test0.getResult()
 
 print "pcm:",

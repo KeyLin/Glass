@@ -1,6 +1,6 @@
 #set -e
 
-myDir="/tmp/work-dir"
+myDir="/tmp/voiceRecognition"
 if [ ! -d "$myDir" ]; then
 	mkdir "$myDir"
 fi
@@ -78,6 +78,6 @@ fi
 #	tar -xzvf speex-1.2rc1.tar.gz  
 #fi
 
-rm -rf ../work-dir
+rm -rf ../voiceRecognition
 
 echo -e "\nSuccessfully deployed!\n"
