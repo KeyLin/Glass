@@ -22,6 +22,7 @@ package[1]=swig
 # python-pocketsphinx-dbg 
 
 # package[7]=pocketsphinx-lm-zh-hans-gigatdt 
+module[0]=pocketsphinx
 
 function PackageInstall()
 {
@@ -85,6 +86,12 @@ if [ $? -eq 1 ]; then
     echo "pocketsphinx successfully installed"
 else echo "pocketsphinx already exit "
 fi
+
+for ((i=0;i<${#module[@]};i++));
+	do
+		#echo ${package[i]}
+		ModuleInstall ${module[i]}
+	done 
 
 pocketsphinx_continuous -samprate 16000/8000/48000 
 #rm -rf ../work-dir
