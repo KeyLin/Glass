@@ -1,7 +1,5 @@
 venv/
-*.wav
 *.pyc
-*.pcm
 *.spx
 *.exe
 *.opus
