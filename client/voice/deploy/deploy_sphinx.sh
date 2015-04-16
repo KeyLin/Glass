@@ -2,7 +2,7 @@
 
 myDir="/tmp/voiceRecognition"
 if [ ! -d "$myDir" ]; then
-	sudo mkdir "$myDir"
+	mkdir "$myDir"
 fi
 
 cd "$myDir"
@@ -64,7 +64,7 @@ if [ $? -eq 1 ]; then
     if [ ! -d "$myDir0" ]; then
     	tar -xzvf sphinxbase-5prealpha.tar.gz
     fi
-    ./sphinxbase-5prealpha/configure --enable-fixed&&make&&sudo make install || { echo "sphinxbase install failed"; exit 1; }
+    ./sphinxbase-5prealpha/configure&&make&&make check&&sudo make install || { echo "sphinxbase install failed"; exit 1; }
     echo "sphinxbase successfully installed"
 else echo "sphinxbase already exit "
 fi
@@ -79,12 +79,43 @@ if [ $? -eq 1 ]; then
     if [ ! -d "$myDir0" ]; then
     	tar -xzvf pocketsphinx-5prealpha.tar.gz
     fi
-    ./pocketsphinx-5prealpha/configure&&make&&sudo make install || { echo "pocketsphinx install failed"; exit 1; }
+    ./pocketsphinx-5prealpha/configure&&make clean all&&make check&&sudo make install || { echo "pocketsphinx install failed"; exit 1; }
     echo export LD_LIBRARY_PATH=/usr/local/lib | sudo tee -a /etc/profile 
     echo export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig | sudo tee -a /etc/profile
     source /etc/profile  
     echo "pocketsphinx successfully installed"
 else echo "pocketsphinx already exit "
+fi
+
+sphinxDir="/usr/sphinx-tools/"
+#安装语言模型训练工具
+if [ ! -d "${sphinxDir}/include/cmuclmtk" ]; then
+    myFile0="./cmuclmtk-0.7.tar.gz"
+    myDir0="./cmuclmtk-0.7"
+    if [ ! -f "$myFile0" ]; then
+    	wget http://nchc.dl.sourceforge.net/project/cmusphinx/cmuclmtk/0.7/cmuclmtk-0.7.tar.gz
+    fi
+    if [ ! -d "$myDir0" ]; then
+    	tar -xzvf cmuclmtk-0.7.tar.gz
+    fi
+    ./cmuclmtk-0.7/configure --prefix=${sphinxDir} && make && sudo make install || { echo "cmuclmtk-0.7 install failed"; exit 1; }
+    echo "cmuclmtk-0.7 successfully installed"
+else echo "cmuclmtk-0.7 already exit "
+fi
+
+#安装声学模型训练工具
+if [ ! -d "${sphinxDir}/include/sphinxtrain" ]; then
+    myFile0="./sphinxtrain-5prealpha.tar.gz"
+    myDir0="./sphinxtrain-5prealpha"
+    if [ ! -f "$myFile0" ]; then
+    	wget http://jaist.dl.sourceforge.net/project/cmusphinx/sphinxtrain/5prealpha/sphinxtrain-5prealpha.tar.gz
+    fi
+    if [ ! -d "$myDir0" ]; then
+    	tar -xzvf sphinxtrain-5prealpha.tar.gz
+    fi
+    ./sphinxtrain-5prealpha/configure --prefix=${sphinxDir} && make && sudo make install || { echo "sphinxtrain install failed"; exit 1; }
+    echo "sphinxtrain successfully installed"
+else echo "sphinxtrain already exit "
 fi
 
 for ((i=0;i<${#module[@]};i++));
