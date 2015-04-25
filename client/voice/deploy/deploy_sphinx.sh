@@ -29,9 +29,9 @@ function PackageInstall()
 	#echo $1
 	dpkg -l | grep $1  > /dev/null
 	if [ $? -eq 0 ]; then
-		echo "$1 already exit"
+		echo "$1 already exist"
 	else
-		sudo apt-get install -y $1 || { echo "$1 install failed"; exit 1; } 
+		apt-get install -y $1 || { echo "$1 install failed"; exit 1; } 
 		echo "$1 successfully installed"
 	fi
 	return 0;
@@ -41,9 +41,9 @@ function ModuleInstall()
 {
 	pip freeze | grep $1  > /dev/null
 	if [ $? -eq 0 ]; then
-		echo "$1 already exit"
+		echo "$1 already exist"
 	else
-		sudo pip install $1  --allow-external $1 --allow-unverified $1 || { echo "$1 install failed"; exit 1; }
+		pip install $1  --allow-external $1 --allow-unverified $1 || { echo "$1 install failed"; exit 1; }
 		echo "$1 successfully installed"
 	fi
 }
@@ -64,9 +64,9 @@ if [ $? -eq 1 ]; then
     if [ ! -d "$myDir0" ]; then
     	tar -xzvf sphinxbase-5prealpha.tar.gz
     fi
-    ./sphinxbase-5prealpha/configure&&make&&make check&&sudo make install || { echo "sphinxbase install failed"; exit 1; }
+    ./sphinxbase-5prealpha/configure&&make&&make install || { echo "sphinxbase install failed"; exit 1; }
     echo "sphinxbase successfully installed"
-else echo "sphinxbase already exit "
+else echo "sphinxbase already exist "
 fi
 
 pkg-config --list-all | grep pocketsphinx > /dev/null
@@ -79,12 +79,12 @@ if [ $? -eq 1 ]; then
     if [ ! -d "$myDir0" ]; then
     	tar -xzvf pocketsphinx-5prealpha.tar.gz
     fi
-    ./pocketsphinx-5prealpha/configure&&make clean all&&make check&&sudo make install || { echo "pocketsphinx install failed"; exit 1; }
-    echo export LD_LIBRARY_PATH=/usr/local/lib | sudo tee -a /etc/profile 
-    echo export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig | sudo tee -a /etc/profile
+    ./pocketsphinx-5prealpha/configure && make install || { echo "pocketsphinx install failed"; exit 1; }
+    echo export LD_LIBRARY_PATH=/usr/local/lib | tee -a /etc/profile 
+    echo export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig | tee -a /etc/profile
     source /etc/profile  
     echo "pocketsphinx successfully installed"
-else echo "pocketsphinx already exit "
+else echo "pocketsphinx already exist "
 fi
 
 sphinxDir="/usr/sphinx-tools/"
@@ -98,9 +98,9 @@ if [ ! -d "${sphinxDir}/include/cmuclmtk" ]; then
     if [ ! -d "$myDir0" ]; then
     	tar -xzvf cmuclmtk-0.7.tar.gz
     fi
-    ./cmuclmtk-0.7/configure --prefix=${sphinxDir} && make && sudo make install || { echo "cmuclmtk-0.7 install failed"; exit 1; }
+    ./cmuclmtk-0.7/configure --prefix=${sphinxDir} && make && make install || { echo "cmuclmtk-0.7 install failed"; exit 1; }
     echo "cmuclmtk-0.7 successfully installed"
-else echo "cmuclmtk-0.7 already exit "
+else echo "cmuclmtk-0.7 already exist "
 fi
 
 #安装声学模型训练工具
@@ -113,9 +113,9 @@ if [ ! -d "${sphinxDir}/include/sphinxtrain" ]; then
     if [ ! -d "$myDir0" ]; then
     	tar -xzvf sphinxtrain-5prealpha.tar.gz
     fi
-    ./sphinxtrain-5prealpha/configure --prefix=${sphinxDir} && make && sudo make install || { echo "sphinxtrain install failed"; exit 1; }
+    ./sphinxtrain-5prealpha/configure --prefix=${sphinxDir} && make && make install || { echo "sphinxtrain install failed"; exit 1; }
     echo "sphinxtrain successfully installed"
-else echo "sphinxtrain already exit "
+else echo "sphinxtrain already exist "
 fi
 
 for ((i=0;i<${#module[@]};i++));
