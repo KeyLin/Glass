@@ -71,7 +71,6 @@ for ((i=0;i<${#module[@]};i++));
 	done
 
 
-
 #myFile1="./speex-1.2rc1.tar.gz"
 #if [ ! -f "$myFile1" ]; then  
 #	wget http://downloads.xiph.org/releases/speex/speex-1.2rc1.tar.gz
