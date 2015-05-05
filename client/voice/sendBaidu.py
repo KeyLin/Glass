@@ -73,19 +73,20 @@ class sendBaidu(object):
 
 	def getResult(self):
 		result = self.sendAudio()
+		print result.text
 		#print type(result)
 		result = result.json()
 		#print type(result)
 		if result.get('err_no') == 0:
 			text = "".join(result.get('result')).encode('utf-8')
-			print text
+			#print text
 		else:
-			err_no = result['err_no']
+			# err_no = result['err_no']
 			err_msg = "".join(result.get('err_msg')).encode('utf-8')
-			sn = "".join(result.get('sn')).encode('utf-8')
-			print "err_no:"+str(err_no)
-			print "err_msg:"+err_msg
-			print "sn:"+sn
+			# sn = "".join(result.get('sn')).encode('utf-8')
+			# print "err_no:"+str(err_no)
+			#print "err_msg:"+err_msg
+			# print "sn:"+sn
 			#exit(0)
 		#print str(result)
 
