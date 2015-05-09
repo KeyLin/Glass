@@ -61,6 +61,7 @@ for ((i=0;i<${#module[@]};i++));
 		ModuleInstall ${module[i]}
 	done
 
+#notice:jack* may cause audio record problem.Just remove jack*.
 
 #myFile1="./speex-1.2rc1.tar.gz"
 #if [ ! -f "$myFile1" ]; then  
