@@ -18,10 +18,10 @@ package[2]=python-pip
 package[3]=speex
 package[4]=libspeex-dev
 package[5]=pkg-config
-package[6]=requests
 
 module[0]=PyAudio
 module[1]=Pyrex
+module[2]=requests
 
 
 function PackageInstall()
