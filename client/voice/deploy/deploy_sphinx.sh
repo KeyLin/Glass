@@ -1,4 +1,4 @@
-#bin/bash
+#!/bin/bash
 
 myDir="/tmp/voiceRecognition"
 if [ ! -d "$myDir" ]; then

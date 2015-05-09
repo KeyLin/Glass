@@ -11,8 +11,9 @@ CHANNELS = 1
 RATE = 16000
 RECORD_SECONDS = 5
 WAVE_OUTPUT_FILENAME = "cmd"
-
+print pyaudio.get_portaudio_version_text()
 p = pyaudio.PyAudio()
+print p.get_device_count()
 
 stream = p.open(format=FORMAT,
 				channels=CHANNELS,

@@ -1,3 +1,4 @@
+#!/bin/bash
 #set -e
 
 myDir="/tmp/voiceRecognition"
@@ -78,6 +79,6 @@ for ((i=0;i<${#module[@]};i++));
 #	tar -xzvf speex-1.2rc1.tar.gz  
 #fi
 
-rm -rf ../voiceRecognition
+#rm -rf ../voiceRecognition
 
 echo -e "\nSuccessfully deployed!\n"
