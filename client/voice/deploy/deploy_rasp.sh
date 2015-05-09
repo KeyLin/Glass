@@ -14,10 +14,11 @@ declare -a module
 package[0]=libogg-dev
 package[1]=python2.7-dev
 package[2]=python-pip
-
 package[3]=speex
 package[4]=libspeex-dev
 package[5]=pkg-config
+package[6]=portaudio19-dev
+package[7]=python-pyaudio
 
 module[0]=PyAudio
 module[1]=Pyrex
@@ -47,18 +48,6 @@ function ModuleInstall()
 		echo "$1 successfully installed"
 	fi
 }
-
-pkg-config --list-all | grep portaudio > /dev/null
-if [ $? -eq 1 ]; then
-    myFile0="./pa_stable_v19_20140130.tgz"
-    if [ ! -f "$myFile0" ]; then
-    	wget http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz
-    fi
-    tar -xzvf pa_stable_v19_20140130.tgz
-    ./portaudio/configure&&make clean&&make&&make install  || { echo "portaudio install failed"; exit 1; }
-    echo "portaudio successfully installed"
-else echo "portaudio already exist "
-fi
 
 for ((i=0;i<${#package[@]};i++));
 	do
