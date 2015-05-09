@@ -2,3 +2,4 @@ venv/
 *.exe
 .idea/
 .DS_store
+*.pyc
