@@ -1,4 +1,6 @@
-#coding=utf-8
+# -*- coding: utf-8 -*-
+#!/bin/python 
+
 import urllib,urllib2
 import requests
 import json
@@ -7,26 +9,26 @@ import ConfigParser
 import base64
 import os
 
-class sendBaidu(object):
-	"""docstring for sendBaidu"""
-	def __init__(self, fileFormat, audioFile):
-		super(sendBaidu, self).__init__()
+class SendBaidu(object):
+	"""docstring for SendBaidu"""
+	def __init__(self, file_format, audio_file):
+		super(SendBaidu, self).__init__()
 		config = ConfigParser.ConfigParser()
 		config.read('config.ini')
 
 		self.cuid = config.get('baidu','cuid')
-		self.apiKey = config.get('baidu','apiKey')
-		self.secretKey = config.get('baidu','secretKey')
-		self.tokenUrl = config.get('baidu','tokenUrl')
-		self.serverUrl = config.get('baidu','serverUrl')
-		self.fileFormat = fileFormat
-		self.audioFile = audioFile 
+		self.api_key = config.get('baidu','apiKey')
+		self.secret_key = config.get('baidu','secretKey')
+		self.token_url = config.get('baidu','tokenUrl')
+		self.server_url = config.get('baidu','serverUrl')
+		self.file_format = file_format
+		self.audio_file = audio_file 
 		
 
-	def getToken(self):
-		getTokenURL = self.tokenUrl + "&client_id=" + self.apiKey + "&client_secret=" + self.secretKey
-		#print getTokenURL
-		f = urllib.urlopen(getTokenURL)
+	def get_token(self):
+		get_token_url = self.token_url + "&client_id=" + self.api_key + "&client_secret=" + self.secret_key
+		#print get_token_url
+		f = urllib.urlopen(get_token_url)
 		try:
 			access_token =  eval(f.read())['access_token']
 		except:
@@ -35,8 +37,8 @@ class sendBaidu(object):
 		return access_token	
 
 
-	def decodeFile(self):
-		with open(self.audioFile,"r") as f:
+	def decode_file(self):
+		with open(self.audio_file,"r") as f:
 			data = f.read()
 			data_base64 = base64.b64encode(data) 
 		if data_base64:
@@ -46,13 +48,13 @@ class sendBaidu(object):
 			return None 
 
     
-	def sendAudio(self):
+	def send_audio(self):
 		content_length = 0
-		file_len = os.path.getsize(self.audioFile)
-		body = self.decodeFile()
-		access_token = self.getToken()
+		file_len = os.path.getsize(self.audio_file)
+		body = self.decode_file()
+		access_token = self.get_token()
 		data_json = {
-			"format" : self.fileFormat,
+			"format" : self.file_format,
 			"rate"   : 16000,
 			"channel": 1,
 			"cuid"   : self.cuid,
@@ -66,13 +68,13 @@ class sendBaidu(object):
 			"charset" : "utf-8",
 		}
 
-		r = requests.post(self.serverUrl, headers = headers, data = json.dumps(data_json))
+		r = requests.post(self.server_url, headers = headers, data = json.dumps(data_json))
 
 		return r
 
 
-	def getResult(self):
-		result = self.sendAudio()
+	def get_result(self):
+		result = self.send_audio()
 		print result.text
 		#print type(result)
 		result = result.json()
@@ -86,5 +88,5 @@ class sendBaidu(object):
 			#exit(0)
 
 if __name__ == "__main__":
-	test = sendBaidu(fileFormat = "pcm", audioFile = "data/cmd.pcm")
-	test.getResult()
+	test = SendBaidu(file_format = "pcm", audio_file = "data/cmd.pcm")
+	test.get_result()
