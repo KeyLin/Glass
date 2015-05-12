@@ -14,7 +14,7 @@ class SendBaidu(object):
 	def __init__(self, file_format, audio_file):
 		super(SendBaidu, self).__init__()
 		config = ConfigParser.ConfigParser()
-		config.read('config.ini')
+		config.read('../config/config.ini')
 
 		self.cuid = config.get('baidu','cuid')
 		self.api_key = config.get('baidu','apiKey')
