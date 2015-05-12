@@ -1,5 +1,5 @@
 #!/bin/python
-#coding=utf-8
+# -*- coding: utf-8 -*-
 
 from sendBaidu import sendBaidu
 
