@@ -17,12 +17,14 @@ package[2]=python-pip
 package[3]=speex
 package[4]=libspeex-dev
 package[5]=pkg-config
-package[6]=portaudio19-dev
-package[7]=python-pyaudio
+package[6]=libportaudio2
+package[7]=portaudio19-dev
+package[8]=python-pyaudio
+package[9]=bluez-alsa
 
-module[0]=PyAudio
-module[1]=Pyrex
-module[2]=requests
+#module[0]=PyAudio
+module[0]=Pyrex
+module[1]=requests
 
 
 function PackageInstall()
