@@ -1,0 +1,1 @@
+pocketsphinx_continuous -hmm cmu/zh_broadcastnews_ptm256_8000/ -lm cmu/zh_broadcastnews_64000_utf8.DMP -dict cmu/zh_broadcastnews_utf8.dic -infile ../data/cmd.spx.wav
