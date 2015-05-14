@@ -3,4 +3,4 @@ venv/
 .idea/
 .DS_store
 *.pyc
-client/voice/sphinx/*
+client/voice/models/*/
